@@ -144,6 +144,39 @@ function lastSummaryFor(exId, day) {
   return null;
 }
 
+function suggestedSetsFor(exId, day, n) {
+  const arr = new Array(n).fill(null).map(() => ({ c:"", r:"" }));
+  const last = lastSetsFor(exId, day);
+  if (last && last.sets.some(s => s.c || s.r)) {
+    for (let i = 0; i < n; i++) { const s = last.sets[i]; if (s) arr[i] = { c: s.c || "", r: s.r || "" }; }
+    return arr;
+  }
+  const old = lastEntryFor(exId, day);
+  if (old && (old.load || old.reps)) {
+    for (let i = 0; i < n; i++) arr[i] = { c: old.load || "", r: old.reps || "" };
+  }
+  return arr;
+}
+
+function applySuggested(exId, i) {
+  const day = dateEl.value;
+  const sets = ensureSets(exId, day);
+  const suggested = suggestedSetsFor(exId, day, sets.length);
+  const sug = suggested[i];
+  if (!sug || (!sug.c && !sug.r)) return;
+  sets[i] = { c: sug.c, r: sug.r };
+  save(); render();
+}
+
+function repeatLast(exId) {
+  const day = dateEl.value;
+  const sets = ensureSets(exId, day);
+  const suggested = suggestedSetsFor(exId, day, sets.length);
+  if (!suggested.some(s => s.c || s.r)) return;
+  for (let i = 0; i < sets.length; i++) { if (suggested[i].c || suggested[i].r) sets[i] = { c: suggested[i].c, r: suggested[i].r }; }
+  save(); render();
+}
+
 function pickWorkout(id) {
   const day = dateEl.value;
   data.selected[day] = data.selected[day] === id ? undefined : id;
@@ -175,16 +208,25 @@ function render() {
   html += `<div class="cols"><div style="flex:1">Exercício</div><div style="width:70px;text-align:center">Carga</div><div style="width:56px;text-align:center">Reps</div></div>`;
   w.exercises.forEach(ex => {
     const sets = ensureSets(ex.id, day);
+    const suggested = suggestedSetsFor(ex.id, day, sets.length);
+    const hasSuggestion = suggested.some(s => s.c || s.r);
     const last = lastSummaryFor(ex.id, day);
-    const rows = sets.map((s, i) => `
+    const rows = sets.map((s, i) => {
+      const sug = suggested[i] || { c:"", r:"" };
+      const isTemp = !s.c && !s.r;
+      const showCheck = isTemp && (sug.c || sug.r);
+      return `
       <div class="setrow">
         <span class="setnum">${i+1}ª</span>
-        <input class="num carga" inputmode="decimal" placeholder="—" value="${escapeAttr(s.c)}" oninput="setCell('${ex.id}', ${i}, 'c', this.value)">
-        <input class="num reps" inputmode="numeric" placeholder="—" value="${escapeAttr(s.r)}" oninput="setCell('${ex.id}', ${i}, 'r', this.value)">
-      </div>`).join("");
+        <input class="num carga" inputmode="decimal" placeholder="${escapeAttr(sug.c || '—')}" value="${escapeAttr(s.c)}" oninput="setCell('${ex.id}', ${i}, 'c', this.value)">
+        <input class="num reps" inputmode="numeric" placeholder="${escapeAttr(sug.r || '—')}" value="${escapeAttr(s.r)}" oninput="setCell('${ex.id}', ${i}, 'r', this.value)">
+        ${showCheck ? `<button class="setcheck" onclick="applySuggested('${ex.id}', ${i})" title="usar sugestão">✓</button>` : `<span class="setcheck-spacer"></span>`}
+      </div>`;
+    }).join("");
     html += `<div class="ex">
       <div class="exhead">
-        <span class="extag">${ex.tag}</span><span class="exname">${ex.name}</span>
+        <div class="exhead-left"><span class="extag">${ex.tag}</span><span class="exname">${ex.name}</span></div>
+        ${hasSuggestion ? `<button class="repeatbtn" onclick="repeatLast('${ex.id}')">repetir último</button>` : ``}
       </div>
       <div class="exscheme">${ex.scheme}</div>
       <div class="setrows">${rows}</div>

@@ -31,13 +31,24 @@ input[type=date] {
 .cols { display: flex; font-size: 13px; color: #7d8aa0; font-weight: 700; padding: 0 4px 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 .ex { background: #141a22; border: 1px solid #232c38; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
 .exrow { display: flex; align-items: center; gap: 8px; }
-.exhead { display: flex; align-items: center; gap: 6px; }
+.exhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.exhead-left { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .extag { font-size: 12px; font-weight: 800; color: #4ea1ff; background: #0e1b2e; padding: 1px 5px; border-radius: 4px; }
 .exname { font-size: 16px; font-weight: 600; }
 .exscheme { font-size: 14px; color: #7d8aa0; margin-top: 3px; }
+.repeatbtn {
+  flex-shrink: 0; font-size: 12px; font-weight: 600; color: #9ecbff;
+  background: #12233b; border: 1px solid #2b4a72; border-radius: 8px;
+  padding: 4px 8px; font-family: inherit; cursor: pointer;
+}
 .setrows { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
 .setrow { display: flex; align-items: center; gap: 8px; }
 .setnum { width: 26px; font-size: 13px; color: #7d8aa0; font-weight: 600; }
+.setcheck, .setcheck-spacer { width: 32px; height: 32px; flex-shrink: 0; }
+.setcheck {
+  border-radius: 8px; border: 1px solid #2b4a72; background: #12233b; color: #9ecbff;
+  font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
+}
 .num {
   background: #0e1116; border: 1px solid #2b3542; color: #e7ecf3;
   padding: 8px 6px; border-radius: 8px; font-size: 17px; text-align: center; font-family: inherit;
