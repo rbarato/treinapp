@@ -31,9 +31,13 @@ input[type=date] {
 .cols { display: flex; font-size: 13px; color: #7d8aa0; font-weight: 700; padding: 0 4px 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 .ex { background: #141a22; border: 1px solid #232c38; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
 .exrow { display: flex; align-items: center; gap: 8px; }
+.exhead { display: flex; align-items: center; gap: 6px; }
 .extag { font-size: 12px; font-weight: 800; color: #4ea1ff; background: #0e1b2e; padding: 1px 5px; border-radius: 4px; }
 .exname { font-size: 16px; font-weight: 600; }
 .exscheme { font-size: 14px; color: #7d8aa0; margin-top: 3px; }
+.setrows { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.setrow { display: flex; align-items: center; gap: 8px; }
+.setnum { width: 26px; font-size: 13px; color: #7d8aa0; font-weight: 600; }
 .num {
   background: #0e1116; border: 1px solid #2b3542; color: #e7ecf3;
   padding: 8px 6px; border-radius: 8px; font-size: 17px; text-align: center; font-family: inherit;

@@ -34,10 +34,56 @@ const WORKOUTS = [
   HYROX,
 ];
 const byId = id => WORKOUTS.find(w => w.id === id);
+const findExercise = exId => { for (const w of WORKOUTS) { const ex = w.exercises && w.exercises.find(e => e.id === exId); if (ex) return ex; } return null; };
 const KEY = "logTreino_v1";
 
-let data = { selected:{}, loads:{}, reps:{} };
-try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); data = { selected:p.selected||{}, loads:p.loads||{}, reps:p.reps||{} }; } } catch(e){}
+function setsOf(ex) {
+  const m = ex.scheme && ex.scheme.match(/^\s*(\d+)/);
+  return m ? parseInt(m[1], 10) : 1;
+}
+
+function ensureSets(exId, day) {
+  const key = day + "|" + exId;
+  const ex = findExercise(exId);
+  const n = ex ? setsOf(ex) : 1;
+  let arr = data.sets[key];
+  if (!arr) {
+    const oldLoad = data.loads[key] || "";
+    const oldReps = data.reps[key] || "";
+    arr = [];
+    for (let i = 0; i < n; i++) arr.push({ c: oldLoad, r: oldReps });
+    data.sets[key] = arr;
+  } else {
+    while (arr.length < n) arr.push({ c: "", r: "" });
+  }
+  return data.sets[key];
+}
+
+function migrateOldData() {
+  const keys = new Set([...Object.keys(data.loads), ...Object.keys(data.reps)]);
+  let migrated = false;
+  keys.forEach(key => {
+    if (data.sets[key]) return;
+    const [day, exId] = key.split("|");
+    const ex = findExercise(exId);
+    if (!ex) return;
+    const oldLoad = data.loads[key] || "";
+    const oldReps = data.reps[key] || "";
+    if (!oldLoad && !oldReps) return;
+    const n = setsOf(ex);
+    const arr = [];
+    for (let i = 0; i < n; i++) arr.push({ c: oldLoad, r: oldReps });
+    data.sets[key] = arr;
+    migrated = true;
+  });
+  return migrated;
+}
+
+function escapeAttr(v) { return String(v == null ? "" : v).replace(/"/g, "&quot;"); }
+
+let data = { selected:{}, loads:{}, reps:{}, sets:{} };
+try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); data = { selected:p.selected||{}, loads:p.loads||{}, reps:p.reps||{}, sets:p.sets||{} }; } } catch(e){}
+if (migrateOldData()) { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
 
 let saveTimer = null;
 function save() {
@@ -66,6 +112,36 @@ function lastEntryFor(exId, day) {
   if (!prev.length) return null;
   const d = prev[0];
   return { date:d, load:data.loads[d+"|"+exId]||null, reps:data.reps[d+"|"+exId]||null };
+}
+
+function lastSetsFor(exId, day) {
+  const dates = new Set();
+  Object.keys(data.sets).forEach(k => {
+    if (k.endsWith("|"+exId) && data.sets[k] && data.sets[k].some(s => s.c || s.r)) dates.add(k.split("|")[0]);
+  });
+  const prev = [...dates].filter(d => d < day).sort((a,b)=> a<b?1:-1);
+  if (!prev.length) return null;
+  const d = prev[0];
+  return { date:d, sets:data.sets[d+"|"+exId] };
+}
+
+function lastSummaryFor(exId, day) {
+  const s = lastSetsFor(exId, day);
+  if (s) {
+    const parts = s.sets.map(st => {
+      if (st.c && st.r) return `${st.c}×${st.r}`;
+      if (st.c) return `${st.c}`;
+      if (st.r) return `×${st.r}`;
+      return null;
+    }).filter(Boolean);
+    if (parts.length) return { date:s.date, text:parts.join(" ") };
+  }
+  const old = lastEntryFor(exId, day);
+  if (old) {
+    const text = `${old.load?old.load+'kg':'—'}${old.reps?` × ${old.reps} reps`:''}`;
+    return { date:old.date, text };
+  }
+  return null;
 }
 
 function pickWorkout(id) {
@@ -98,28 +174,33 @@ function render() {
   let html = `<div class="whead"><div class="wtitle">${w.label}</div><div style="font-size:14px;color:#7d8aa0">carga (kg) · reps</div></div>`;
   html += `<div class="cols"><div style="flex:1">Exercício</div><div style="width:70px;text-align:center">Carga</div><div style="width:56px;text-align:center">Reps</div></div>`;
   w.exercises.forEach(ex => {
-    const last = lastEntryFor(ex.id, day);
-    const lk = day+"|"+ex.id;
+    const sets = ensureSets(ex.id, day);
+    const last = lastSummaryFor(ex.id, day);
+    const rows = sets.map((s, i) => `
+      <div class="setrow">
+        <span class="setnum">${i+1}ª</span>
+        <input class="num carga" inputmode="decimal" placeholder="—" value="${escapeAttr(s.c)}" oninput="setCell('${ex.id}', ${i}, 'c', this.value)">
+        <input class="num reps" inputmode="numeric" placeholder="—" value="${escapeAttr(s.r)}" oninput="setCell('${ex.id}', ${i}, 'r', this.value)">
+      </div>`).join("");
     html += `<div class="ex">
-      <div class="exrow">
-        <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:6px">
-            <span class="extag">${ex.tag}</span><span class="exname">${ex.name}</span>
-          </div>
-          <div class="exscheme">${ex.scheme}</div>
-        </div>
-        <input class="num carga" inputmode="decimal" placeholder="${last&&last.load?last.load:'—'}" value="${data.loads[lk]||''}" oninput="setLoad('${ex.id}', this.value)">
-        <input class="num reps" inputmode="numeric" placeholder="${last&&last.reps?last.reps:'—'}" value="${data.reps[lk]||''}" oninput="setRep('${ex.id}', this.value)">
+      <div class="exhead">
+        <span class="extag">${ex.tag}</span><span class="exname">${ex.name}</span>
       </div>
-      ${last ? `<div class="last">última: <b>${last.load?last.load+'kg':'—'}</b>${last.reps?` × <b>${last.reps}</b> reps`:''} · ${last.date.slice(5)}</div>` : ``}
+      <div class="exscheme">${ex.scheme}</div>
+      <div class="setrows">${rows}</div>
+      ${last ? `<div class="last">última: <b>${last.text}</b> · ${last.date.slice(5)}</div>` : ``}
     </div>`;
   });
   if (w.id === "costas") html += `<div class="note">* Se lombar/pegada fadigadas pós-HYROX, troque a remada curvada por remada apoiada ou puxada.</div>`;
   c.innerHTML = html;
 }
 
-function setLoad(exId, v) { data.loads[dateEl.value+"|"+exId] = v; save(); }
-function setRep(exId, v) { data.reps[dateEl.value+"|"+exId] = v; save(); }
+function setCell(exId, i, field, value) {
+  const day = dateEl.value;
+  const sets = ensureSets(exId, day);
+  sets[i][field] = value;
+  save();
+}
 
 function setExportMsg(msg, ok) {
   const el = document.getElementById("exportMsg");
@@ -168,7 +249,7 @@ function importData() {
     return;
   }
   if (!confirm("Isso vai substituir todos os dados salvos neste dispositivo pelos dados importados. Continuar?")) return;
-  data = { selected: parsed.selected || {}, loads: parsed.loads || {}, reps: parsed.reps || {} };
+  data = { selected: parsed.selected || {}, loads: parsed.loads || {}, reps: parsed.reps || {}, sets: parsed.sets || {} };
   try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
   document.getElementById("importInput").value = "";
   setImportMsg("✓ dados importados com sucesso", true);
