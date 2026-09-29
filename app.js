@@ -6,8 +6,9 @@ const WORKOUTS = [
     {id:"p2_a2", name:"Supino reto halteres, pegada pronada (pausa 1s embaixo)", scheme:"3 × 8-10", tag:"A2"},
     {id:"p2_b1", name:"Crossover polia baixa → alta (peito superior)", scheme:"3 × 12-15", tag:"B1"},
     {id:"p2_b2", name:"Flexão com pés no banco (finisher)", scheme:"2 × falha", tag:"B2"},
-    {id:"p2_c1", name:"Tríceps francês na polia com corda (pegada neutra)", scheme:"3 × 10-12", tag:"C1"},
-    {id:"p2_c2", name:"Supino fechado barra (pegada pronada)", scheme:"3 × 8", tag:"C2"},
+    {id:"p2_c1", name:"Tríceps francês na polia com corda (pegada neutra)", scheme:"4 × 10-12", tag:"C1"},
+    {id:"p2_c2", name:"Supino fechado barra (pegada pronada)", scheme:"3 × 6-8", tag:"C2"},
+    {id:"p_c1", name:"Tríceps corda na polia alta (pegada neutra)", scheme:"3 × 12-15", tag:"C3"},
     {id:"p_e", name:"Rosca punho invertida W (pegada pronada)", scheme:"2 × 15-20", tag:"D1"},
     {id:"p2_e1", name:"Elevação lateral no cabo (unilateral)", scheme:"3 × 12-15", tag:"E1"},
     {id:"p2_e2", name:"Face pull na polia alta com corda (pegada neutra)", scheme:"3 × 15", tag:"E2"},
@@ -24,7 +25,7 @@ const WORKOUTS = [
     {id:"c_e2", name:"Rosca de punho invertida (pegada pronada)", scheme:"3 × 15-20", tag:"E2"},
     {id:"c_f", name:"Farmer's hold halteres (pegada neutra)", scheme:"2 × máx tempo", tag:"F"},
   ]},
-  { id:"inferior2", label:"Inferior", type:"resist", focus:"Encaixe a cada 2-3 semanas", note:"Sem terra/RDL aqui — o terra já está no dia de costas.", exercises:[
+  { id:"inferior2", label:"Inferior / Ombro", type:"resist", focus:"Encaixe a cada 2-3 semanas", note:"Sem terra/RDL aqui — o terra já está no dia de costas.", exercises:[
     {id:"i2_a1", name:"Agachamento livre barra (rack)", scheme:"4 × 6-8", tag:"A1"},
     {id:"i2_a2", name:"Afundo búlgaro halteres", scheme:"3 × 8-10/perna", tag:"A2"},
     {id:"i_b", name:"Flexora em pé (unilateral)", scheme:"3 × 8-10", tag:"B1"},
@@ -32,6 +33,10 @@ const WORKOUTS = [
     {id:"i2_c1", name:"Abdutora", scheme:"3 × 15-20", tag:"C1"},
     {id:"i2_c2", name:"Adutora", scheme:"3 × 15-20", tag:"C2"},
     {id:"i2_d", name:"Panturrilha no leg press", scheme:"4 × 12-15", tag:"D"},
+    {id:"i2_e1", name:"Desenvolvimento halteres sentado (pegada neutra)", scheme:"3 × 8-10", tag:"E1"},
+    {id:"p_e1", name:"Elevação lateral halteres", scheme:"4 × 12-15", tag:"E2"},
+    {id:"i2_f1", name:"Crucifixo inverso no crossover (posterior de ombro)", scheme:"3 × 15", tag:"F1"},
+    {id:"p_c2", name:"Tríceps testa barra W (pegada pronada)", scheme:"3 × 10", tag:"F2"},
   ]},
   HYROX,
 ];
