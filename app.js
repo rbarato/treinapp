@@ -95,6 +95,8 @@ function ensureSets(exId, day) {
     data.sets[key] = arr;
   } else {
     while (arr.length < n) arr.push({ c: "", r: "" });
+    // séries a mais (ex.: esquema mudou de 4 para 3) só somem se estiverem vazias
+    while (arr.length > n && !arr[arr.length - 1].c && !arr[arr.length - 1].r) arr.pop();
   }
   return data.sets[key];
 }
