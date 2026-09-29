@@ -1,5 +1,46 @@
 const HYROX = { id:"hyrox", label:"HYROX", type:"hyrox", focus:"Metabólico / inferiores" };
+// Bloco 2 — força nos básicos (5-8 reps) + volume nos acessórios, ênfase peito e bíceps
 const WORKOUTS = [
+  { id:"peito2", label:"Peito / Tríceps", type:"resist", focus:"Empurrar · ênfase peito", note:"Básicos (A): quando fechar todas as séries no topo da faixa, +2,5kg. Acessórios: suba reps até o topo, depois carga.", exercises:[
+    {id:"p2_a1", name:"Supino inclinado barra 30° (pegada pronada)", scheme:"3 × 5-7", tag:"A1"},
+    {id:"p2_a2", name:"Supino reto halteres, pegada pronada (pausa 1s embaixo)", scheme:"3 × 8-10", tag:"A2"},
+    {id:"p2_b1", name:"Crossover polia baixa → alta (peito superior)", scheme:"3 × 12-15", tag:"B1"},
+    {id:"p2_b2", name:"Flexão com pés no banco (finisher)", scheme:"3 × falha", tag:"B2"},
+    {id:"p2_c1", name:"Tríceps francês na polia com corda (pegada neutra)", scheme:"3 × 10-12", tag:"C1"},
+    {id:"p2_c2", name:"Supino fechado barra (pegada pronada)", scheme:"3 × 6-8", tag:"C2"},
+    {id:"p_c1", name:"Tríceps corda na polia alta (pegada neutra)", scheme:"3 × 12-15", tag:"C3"},
+    {id:"p2_e1", name:"Elevação lateral no cabo (unilateral)", scheme:"3 × 12-15", tag:"D1"},
+    {id:"p2_e2", name:"Face pull na polia alta com corda (pegada neutra)", scheme:"3 × 15", tag:"D2"},
+  ]},
+  { id:"costas2", label:"Costas / Bíceps", type:"resist", focus:"Puxar · terra + ênfase bíceps", note:"* Terra: RPE 7-8 (2-3 reps na reserva), técnica acima da carga. Se lombar fadigada pós-HYROX, reduza a carga ou troque por RDL. Pegada mista só na última série se a pegada falhar.", exercises:[
+    {id:"c2_a1", name:"Levantamento terra barra (pegada pronada)*", scheme:"3 × 4-5", tag:"A"},
+    {id:"c2_b1", name:"Puxada alta pegada supinada", scheme:"3 × 8-10", tag:"B1"},
+    {id:"c2_b2", name:"Remada apoiada halteres no banco inclinado (pegada neutra)", scheme:"3 × 10-12", tag:"B2"},
+    {id:"c2_c1", name:"Rosca direta barra (pegada supinada)", scheme:"3 × 6-8", tag:"C1"},
+    {id:"c2_c2", name:"Rosca inclinada halteres 45-60° (pegada supinada)", scheme:"3 × 10-12", tag:"C2"},
+    {id:"c2_c3", name:"Rosca Bayesian no cabo, de costas p/ polia baixa (pegada supinada)", scheme:"3 × 12-15", tag:"C3"},
+    {id:"c_e1", name:"Rosca de punho (pegada supinada)", scheme:"3 × 15-20", tag:"D1"},
+    {id:"c_e2", name:"Rosca de punho invertida (pegada pronada)", scheme:"3 × 15-20", tag:"D2"},
+    {id:"c2_d", name:"Crucifixo inclinado halteres (pegada neutra)", scheme:"3 × 12", tag:"E"},
+    {id:"c_f", name:"Farmer's hold halteres (pegada neutra)", scheme:"3 × máx tempo", tag:"F"},
+  ]},
+  { id:"inferior2", label:"Inferior / Ombro", type:"resist", focus:"Encaixe a cada 2-3 semanas", note:"Sem terra/RDL aqui — o terra já está no dia de costas.", exercises:[
+    {id:"i2_a1", name:"Agachamento livre barra (rack)", scheme:"3 × 6-8", tag:"A"},
+    {id:"i2_a2", name:"Afundo búlgaro halteres", scheme:"3 × 8-10/perna", tag:"B1"},
+    {id:"i_b", name:"Flexora em pé (unilateral)", scheme:"3 × 8-10", tag:"B2"},
+    {id:"i_a2", name:"Cadeira extensora (pausa 1s no topo)", scheme:"3 × 15", tag:"C1"},
+    {id:"i_d", name:"Panturrilha em pé", scheme:"3 × 12-15", tag:"C2"},
+    {id:"i2_c1", name:"Abdutora", scheme:"3 × 15-20", tag:"D1"},
+    {id:"i2_c2", name:"Adutora", scheme:"3 × 15-20", tag:"D2"},
+    {id:"i2_e1", name:"Desenvolvimento halteres sentado (pegada neutra)", scheme:"3 × 8-10", tag:"E1"},
+    {id:"p_e1", name:"Elevação lateral halteres", scheme:"3 × 12-15", tag:"E2"},
+    {id:"i2_f1", name:"Crucifixo inverso no crossover (posterior de ombro)", scheme:"3 × 15", tag:"F1"},
+    {id:"p_c2", name:"Tríceps testa barra W (pegada pronada)", scheme:"3 × 10", tag:"F2"},
+  ]},
+  HYROX,
+];
+// Bloco 1 (arquivado) — mantido só para exibir o histórico das datas antigas
+const ARCHIVED = [
   { id:"peito", label:"Peito / Tríceps", type:"resist", focus:"Empurrar", exercises:[
     {id:"p_a1", name:"Supino inclinado halteres (45°)", scheme:"4 × 8-10", tag:"A1"},
     {id:"p_a2", name:"Crossover polia alta", scheme:"4 × 12-15", tag:"A2"},
@@ -15,7 +56,7 @@ const WORKOUTS = [
   { id:"costas", label:"Costas / Bíceps", type:"resist", focus:"Puxar", exercises:[
     {id:"c_a1", name:"Barra fixa (ou puxada alta)", scheme:"4 × 6-10", tag:"A1"},
     {id:"c_a2", name:"Remada polia baixa", scheme:"4 × 10-12", tag:"A2"},
-    {id:"c_b1", name:"Remada curvada barra*", scheme:"3 × 8-10", tag:"B1"},
+    {id:"c_b1", name:"Remada curvada barra", scheme:"3 × 8-10", tag:"B1"},
     {id:"c_b2", name:"Pullover no crossover", scheme:"3 × 12", tag:"B2"},
     {id:"c_c1", name:"Rosca direta barra W", scheme:"3 × 10", tag:"C1"},
     {id:"c_c2", name:"Rosca martelo halteres", scheme:"3 × 12", tag:"C2"},
@@ -31,10 +72,9 @@ const WORKOUTS = [
     {id:"i_d", name:"Panturrilha em pé", scheme:"4 × 15", tag:"B2"},
     {id:"i_c", name:"RDL com barra (lower back)", scheme:"3 × 8", tag:"C"},
   ]},
-  HYROX,
 ];
-const byId = id => WORKOUTS.find(w => w.id === id);
-const findExercise = exId => { for (const w of WORKOUTS) { const ex = w.exercises && w.exercises.find(e => e.id === exId); if (ex) return ex; } return null; };
+const byId = id => WORKOUTS.find(w => w.id === id) || ARCHIVED.find(w => w.id === id);
+const findExercise = exId => { for (const w of [...WORKOUTS, ...ARCHIVED]) { const ex = w.exercises && w.exercises.find(e => e.id === exId); if (ex) return ex; } return null; };
 const KEY = "logTreino_v1";
 
 function setsOf(ex) {
@@ -55,6 +95,8 @@ function ensureSets(exId, day) {
     data.sets[key] = arr;
   } else {
     while (arr.length < n) arr.push({ c: "", r: "" });
+    // séries a mais (ex.: esquema mudou de 4 para 3) só somem se estiverem vazias
+    while (arr.length > n && !arr[arr.length - 1].c && !arr[arr.length - 1].r) arr.pop();
   }
   return data.sets[key];
 }
@@ -233,7 +275,7 @@ function render() {
       ${last ? `<div class="last">última: <b>${last.text}</b> · ${last.date.slice(5)}</div>` : ``}
     </div>`;
   });
-  if (w.id === "costas") html += `<div class="note">* Se lombar/pegada fadigadas pós-HYROX, troque a remada curvada por remada apoiada ou puxada.</div>`;
+  if (w.note) html += `<div class="note">${w.note}</div>`;
   c.innerHTML = html;
 }
 
