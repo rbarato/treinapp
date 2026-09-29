@@ -9,9 +9,8 @@ const WORKOUTS = [
     {id:"p2_c1", name:"Tríceps francês na polia com corda (pegada neutra)", scheme:"4 × 10-12", tag:"C1"},
     {id:"p2_c2", name:"Supino fechado barra (pegada pronada)", scheme:"3 × 6-8", tag:"C2"},
     {id:"p_c1", name:"Tríceps corda na polia alta (pegada neutra)", scheme:"3 × 12-15", tag:"C3"},
-    {id:"p_e", name:"Rosca punho invertida W (pegada pronada)", scheme:"2 × 15-20", tag:"D1"},
-    {id:"p2_e1", name:"Elevação lateral no cabo (unilateral)", scheme:"3 × 12-15", tag:"E1"},
-    {id:"p2_e2", name:"Face pull na polia alta com corda (pegada neutra)", scheme:"3 × 15", tag:"E2"},
+    {id:"p2_e1", name:"Elevação lateral no cabo (unilateral)", scheme:"3 × 12-15", tag:"D1"},
+    {id:"p2_e2", name:"Face pull na polia alta com corda (pegada neutra)", scheme:"3 × 15", tag:"D2"},
   ]},
   { id:"costas2", label:"Costas / Bíceps", type:"resist", focus:"Puxar · terra + ênfase bíceps", note:"* Terra: RPE 7-8 (2-3 reps na reserva), técnica acima da carga. Se lombar fadigada pós-HYROX, faça 3 × 5 mais leve ou troque por RDL. Pegada mista só na última série se a pegada falhar.", exercises:[
     {id:"c2_a1", name:"Levantamento terra barra (pegada pronada)*", scheme:"4 × 4-5", tag:"A1"},
